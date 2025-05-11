@@ -2,7 +2,7 @@ password=input("Enter password:")
 print("password:",password)
 length=len(password)
 print("length:",length)
-if length < 8:
+if length < 10:
     print("Password is too short")
 if length> 25:
     print("Password is too long")  
@@ -17,4 +17,5 @@ if char_list_length < length/2:
 if char_list_length >= length/2 and char_list_length<3*length/4:
     print("Character Variety is Medium")        
 if char_list_length >= 3*length/4:
-    print("Character Variety is High")        
+    print("Character Variety is High")   
+#check for uppercase characters,special characters and numbers         
