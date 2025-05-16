@@ -1,3 +1,14 @@
+from nltk.corpus import words
+
+print("Initializing System")
+english_words = set(words.words())
+
+common_passwords = set()
+with open("rockyou.txt", "r", encoding="utf-8", errors="ignore") as f:
+    for line in f:
+        common_passwords.add(line.strip())
+
+print("System Initialized")
 password=input("Enter password:")
 print("password:",password)
 length=len(password)
@@ -81,4 +92,10 @@ for common_password in common_passwords:
     if common_password in password:
         count+=1
 print(f"This password contains {count} commonly used password(s)")
-     
+
+
+for i in range(len(password)):
+    for j in range(i + 4, len(password) + 1):
+        if password[i:j].lower() in english_words:
+            print(f"Contains dictionary word: {password[i:j]}")
+            break
