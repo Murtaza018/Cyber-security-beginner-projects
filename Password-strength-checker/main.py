@@ -99,3 +99,4 @@ for i in range(len(password)):
         if password[i:j].lower() in english_words:
             print(f"Contains dictionary word: {password[i:j]}")
             break
+            break
