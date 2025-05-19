@@ -99,6 +99,32 @@ for i in range(len(password)):
         if password[i:j].lower() in english_words:
             print(f"Contains dictionary word: {password[i:j]}")
             break
+def get_position(char, keyboard_rows):
+    for row_index, row in enumerate(keyboard_rows):
+        if char in row:
+            col_index = row.index(char)
+            return (row_index, col_index)
+    return None  
+
+def is_adjacent(pos1, pos2):
+    if not pos1 or not pos2:
+        return False
+    row_diff = abs(pos1[0] - pos2[0])
+    col_diff = abs(pos1[1] - pos2[1])
+    return row_diff <= 1 and col_diff <= 1
+def has_keyboard_pattern(password, keyboard_rows):
+    password = password.lower()
+    positions = [get_position(c, keyboard_rows) for c in password]
+
+    count = 1
+    for i in range(1, len(positions)):
+        if is_adjacent(positions[i-1], positions[i]):
+            count += 1
+            if count >= 3:
+                return True  
+        else:
+            count = 1 
+    return False
 
 keyboard_rows = [
     "1234567890",
@@ -106,3 +132,9 @@ keyboard_rows = [
     "asdfghjkl",
     "zxcvbnm"
 ]
+
+if has_keyboard_pattern(password, keyboard_rows):
+    print("Password contains a keyboard pattern (like 'qwe')")
+else:
+    print("No keyboard pattern detected")
+
