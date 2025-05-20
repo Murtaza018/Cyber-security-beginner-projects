@@ -138,3 +138,4 @@ if has_keyboard_pattern(password, keyboard_rows):
 else:
     print("No keyboard pattern detected")
 
+#implement check for repeated patterns like aaa bbb abcabc
