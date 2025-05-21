@@ -139,3 +139,29 @@ else:
     print("No keyboard pattern detected")
 
 #implement check for repeated patterns like aaa bbb abcabc
+
+def has_repeated_characters(password, threshold=3):
+    count = 1
+    for i in range(1, len(password)):
+        if password[i] == password[i - 1]:
+            count += 1
+            if count >= threshold:
+                return True
+        else:
+            count = 1
+    return False
+
+def has_repeated_pattern(password):
+    length = len(password)
+    for size in range(1, length // 2 + 1):
+        if length % size == 0:
+            substring = password[:size]
+            if substring * (length // size) == password:
+                return True
+    return False
+
+if has_repeated_characters(password):
+    print("Password contains repeated characters (e.g., 'aaaa')")
+
+if has_repeated_pattern(password):
+    print("Password contains repeated pattern (e.g., 'abcabcabc')")
