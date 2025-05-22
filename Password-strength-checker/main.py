@@ -10,75 +10,81 @@ with open("rockyou.txt", "r", encoding="utf-8", errors="ignore") as f:
         common_passwords.add(line.strip())
 
 print("System Initialized")
-password=input("Enter password:")
-print("password:",password)
-length=len(password)
-print("length:",length)
-if length < 10:
-    print("Password length is too short(must be longer)")
-elif length> 25:
-    print("Password length is long(Good)")  
-else:    
-    print("Password length is moderate(can be longer)")  
 
-char_list=[]
-uppercase=0    
-lowercase=0    
-digit=0
-special=0    
-for char in password:
-    if char not in char_list:
-        char_list.append(char)
-    if char.isupper():
-        uppercase+=1    
-    elif char.islower():
-        lowercase+=1    
-    elif char.isdigit():
-        digit+=1   
+def password_input():
+    password=input("Enter password:")
+    return password
+
+def length_checker(length):
+    if length < 8:
+        print("Password length is too short(must be longer)")
+        return 1
+    elif length> 20:
+        print("Password length is long(Good)")  
+        return 3
+    else:    
+        print("Password length is moderate(can be longer)")  
+        return 2
+
+def characterVarietyCheck(password,length): 
+    char_list=[]
+    uppercase=0    
+    lowercase=0    
+    digit=0
+    special=0    
+    for char in password:
+        if char not in char_list:
+            char_list.append(char)
+        if char.isupper():
+            uppercase+=1    
+        elif char.islower():
+            lowercase+=1    
+        elif char.isdigit():
+            digit+=1   
+        else:
+            special+=1
+
+
+    char_list_length=len(char_list)        
+    print("char_list length:",char_list_length)
+    if char_list_length < length/2:
+        print("Character Variety is Low,(must be higher)")        
+    if char_list_length >= length/2 and char_list_length<3*length/4:
+        print("Character Variety is Moderate(can be higher)")        
+    if char_list_length >= 3*length/4:
+        print("Character Variety is High(Good)")   
+
+
+    if uppercase/length>=0.2:
+        print("Uppercase quantity is High(Good)")
+    elif uppercase/length<0.2 and uppercase/length>0.1:
+        print("Uppercase quantity is Moderate(can be higher)")
     else:
-        special+=1
+        print("Uppercase quantity is Low(must be higher)")
 
 
-char_list_length=len(char_list)        
-print("char_list length:",char_list_length)
-if char_list_length < length/2:
-    print("Character Variety is Low,(must be higher)")        
-if char_list_length >= length/2 and char_list_length<3*length/4:
-    print("Character Variety is Moderate(can be higher)")        
-if char_list_length >= 3*length/4:
-    print("Character Variety is High(Good)")   
+    if lowercase/length>=0.2:
+        print("Lowercase quantity is High(Good)")
+    elif lowercase/length<0.2 and lowercase/length>0.1:
+        print("Lowercase quantity is Moderate(can be higher)")
+    else:
+        print("Lowercase quantity is Low(must be higher)")
 
 
-if uppercase/length>=0.2:
-    print("Uppercase quantity is High(Good)")
-elif uppercase/length<0.2 and uppercase/length>0.1:
-    print("Uppercase quantity is Moderate(can be higher)")
-else:
-    print("Uppercase quantity is Low(must be higher)")
+    if digit/length>=0.2:
+        print("Digit quantity is High(Good)")
+    elif digit/length<0.2 and digit/length>0.1:
+        print("Digit quantity is Moderate(can be higher)")
+    else:
+        print("Digit quantity is Low(must be higher)")
 
 
-if lowercase/length>=0.2:
-    print("Lowercase quantity is High(Good)")
-elif lowercase/length<0.2 and lowercase/length>0.1:
-    print("Lowercase quantity is Moderate(can be higher)")
-else:
-    print("Lowercase quantity is Low(must be higher)")
-
-
-if digit/length>=0.2:
-    print("Digit quantity is High(Good)")
-elif digit/length<0.2 and digit/length>0.1:
-    print("Digit quantity is Moderate(can be higher)")
-else:
-    print("Digit quantity is Low(must be higher)")
-
-
-if special/length>=0.2:
-    print("Special Characters quantity is High(Good)")
-elif special/length<0.2 and special/length>0.1:
-    print("Special Characters quantity is Moderate(can be higher)")
-else:
-    print("Special Characters is Low(must be higher)")
+    if special/length>=0.2:
+        print("Special Characters quantity is High(Good)")
+    elif special/length<0.2 and special/length>0.1:
+        print("Special Characters quantity is Moderate(can be higher)")
+    else:
+        print("Special Characters is Low(must be higher)")
 
 
 common_passwords = set()
@@ -177,3 +183,9 @@ elif entropy <60:
     print("Password Entropy Value is moderate")
 else:
     print("Password Entropy Value is high")
+
+password=password_input()    
+length=len(password)
+rating=0
+rating+=length_checker(length)
+rating+=characterVarietyCheck(password,length)
