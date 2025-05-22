@@ -1,4 +1,5 @@
 from nltk.corpus import words
+import math
 
 print("Initializing System")
 english_words = set(words.words())
@@ -36,6 +37,7 @@ for char in password:
         digit+=1   
     else:
         special+=1
+
 
 char_list_length=len(char_list)        
 print("char_list length:",char_list_length)
@@ -165,3 +167,13 @@ if has_repeated_characters(password):
 
 if has_repeated_pattern(password):
     print("Password contains repeated pattern (e.g., 'abcabcabc')")
+
+
+charset=(uppercase*26) + (lowercase*26) +(digit*10) +(special*32)
+entropy=length* math.log2(charset)
+if entropy <40:
+    print("Password Entropy Value is weak")
+elif entropy <60:
+    print("Password Entropy Value is moderate")
+else:
+    print("Password Entropy Value is high")
