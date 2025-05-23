@@ -1,15 +1,17 @@
 from nltk.corpus import words
 import math
 
-print("Initializing System")
-english_words = set(words.words())
+def initializeSystem():
+    print("Initializing System")
+    english_words = set(words.words())
 
-common_passwords = set()
-with open("rockyou.txt", "r", encoding="utf-8", errors="ignore") as f:
-    for line in f:
-        common_passwords.add(line.strip())
+    common_passwords = set()
+    with open("rockyou.txt", "r", encoding="utf-8", errors="ignore") as f:
+        for line in f:
+            common_passwords.add(line.strip())
 
-print("System Initialized")
+    print("System Initialized")
+    return common_passwords,english_words
 
 def password_input():
     password=input("Enter password:")
@@ -86,27 +88,23 @@ def characterVarietyCheck(password,length):
     else:
         print("Special Characters is Low(must be higher)")
 
+def commonPasswordCheck(password,common_passwords):
+    if password in common_passwords:
+        print("Password is a commonly used password.")
 
-common_passwords = set()
-with open("rockyou.txt", "r", encoding="utf-8", errors="ignore") as f:
-    for line in f:
-        common_passwords.add(line.strip())
+    count=0
+    for common_password in common_passwords:
+        if common_password in password:
+            count+=1
+    print(f"This password contains {count} commonly used password(s)")
 
-if password in common_passwords:
-    print("Password is a commonly used password.")
+def dictionaryWordCheck(password,english_words):
+    for i in range(len(password)):
+        for j in range(i + 4, len(password) + 1):
+            if password[i:j].lower() in english_words:
+                print(f"Contains dictionary word: {password[i:j]}")
+                break
 
-count=0
-for common_password in common_passwords:
-    if common_password in password:
-        count+=1
-print(f"This password contains {count} commonly used password(s)")
-
-
-for i in range(len(password)):
-    for j in range(i + 4, len(password) + 1):
-        if password[i:j].lower() in english_words:
-            print(f"Contains dictionary word: {password[i:j]}")
-            break
 def get_position(char, keyboard_rows):
     for row_index, row in enumerate(keyboard_rows):
         if char in row:
@@ -184,8 +182,12 @@ elif entropy <60:
 else:
     print("Password Entropy Value is high")
 
+
+common_passwords,english_words=initializeSystem()
 password=password_input()    
 length=len(password)
 rating=0
 rating+=length_checker(length)
 rating+=characterVarietyCheck(password,length)
+rating+=commonPasswordCheck(password,common_passwords)
+rating+=dictionaryWordCheck(password,english_words)
