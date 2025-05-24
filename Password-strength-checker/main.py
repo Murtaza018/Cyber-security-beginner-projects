@@ -104,21 +104,28 @@ def dictionaryWordCheck(password,english_words):
             if password[i:j].lower() in english_words:
                 print(f"Contains dictionary word: {password[i:j]}")
                 break
+def keyboardPattern(password):
+    def get_position(char, keyboard_rows):
+        for row_index, row in enumerate(keyboard_rows):
+            if char in row:
+                col_index = row.index(char)
+                return (row_index, col_index)
+        return None  
 
-def get_position(char, keyboard_rows):
-    for row_index, row in enumerate(keyboard_rows):
-        if char in row:
-            col_index = row.index(char)
-            return (row_index, col_index)
-    return None  
-
-def is_adjacent(pos1, pos2):
-    if not pos1 or not pos2:
-        return False
-    row_diff = abs(pos1[0] - pos2[0])
-    col_diff = abs(pos1[1] - pos2[1])
-    return row_diff <= 1 and col_diff <= 1
-def has_keyboard_pattern(password, keyboard_rows):
+    def is_adjacent(pos1, pos2):
+        if not pos1 or not pos2:
+            return False
+        row_diff = abs(pos1[0] - pos2[0])
+        col_diff = abs(pos1[1] - pos2[1])
+        return row_diff <= 1 and col_diff <= 1
+    
+    keyboard_rows = [
+        "1234567890",
+        "qwertyuiop",
+        "asdfghjkl",
+        "zxcvbnm"
+    ]
+    
     password = password.lower()
     positions = [get_position(c, keyboard_rows) for c in password]
 
@@ -127,24 +134,13 @@ def has_keyboard_pattern(password, keyboard_rows):
         if is_adjacent(positions[i-1], positions[i]):
             count += 1
             if count >= 3:
-                return True  
+                print("Password contains a keyboard pattern (like 'qwe')")  
         else:
             count = 1 
-    return False
-
-keyboard_rows = [
-    "1234567890",
-    "qwertyuiop",
-    "asdfghjkl",
-    "zxcvbnm"
-]
-
-if has_keyboard_pattern(password, keyboard_rows):
-    print("Password contains a keyboard pattern (like 'qwe')")
-else:
+    
     print("No keyboard pattern detected")
 
-#implement check for repeated patterns like aaa bbb abcabc
+
 
 def has_repeated_characters(password, threshold=3):
     count = 1
@@ -152,10 +148,10 @@ def has_repeated_characters(password, threshold=3):
         if password[i] == password[i - 1]:
             count += 1
             if count >= threshold:
-                return True
+                print("Password contains repeated characters (e.g., 'aaaa')")
         else:
             count = 1
-    return False
+    print("Password does not contain repeated characters (e.g., 'aaaa')")
 
 def has_repeated_pattern(password):
     length = len(password)
@@ -163,24 +159,18 @@ def has_repeated_pattern(password):
         if length % size == 0:
             substring = password[:size]
             if substring * (length // size) == password:
-                return True
-    return False
+                print("Password contains repeated pattern (e.g., 'abcabcabc')")
+    print("Password does not contain repeated pattern (e.g., 'abcabcabc')")
 
-if has_repeated_characters(password):
-    print("Password contains repeated characters (e.g., 'aaaa')")
-
-if has_repeated_pattern(password):
-    print("Password contains repeated pattern (e.g., 'abcabcabc')")
-
-
-charset=(uppercase*26) + (lowercase*26) +(digit*10) +(special*32)
-entropy=length* math.log2(charset)
-if entropy <40:
-    print("Password Entropy Value is weak")
-elif entropy <60:
-    print("Password Entropy Value is moderate")
-else:
-    print("Password Entropy Value is high")
+def calculateEntropy(length):
+    charset=(uppercase*26) + (lowercase*26) +(digit*10) +(special*32)
+    entropy=length* math.log2(charset)
+    if entropy <40:
+        print("Password Entropy Value is weak")
+    elif entropy <60:
+        print("Password Entropy Value is moderate")
+    else:
+        print("Password Entropy Value is high")
 
 
 common_passwords,english_words=initializeSystem()
@@ -191,3 +181,5 @@ rating+=length_checker(length)
 rating+=characterVarietyCheck(password,length)
 rating+=commonPasswordCheck(password,common_passwords)
 rating+=dictionaryWordCheck(password,english_words)
+rating+=keyboardPattern(password)
+rating+=calculateEntropy(length)
