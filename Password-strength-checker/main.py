@@ -16,19 +16,7 @@ def initializeSystem():
 def password_input():
     password=input("Enter password:")
     return password
-
-def length_checker(length):
-    if length < 8:
-        print("Password length is too short(must be longer)")
-        return 1
-    elif length> 20:
-        print("Password length is long(Good)")  
-        return 3
-    else:    
-        print("Password length is moderate(can be longer)")  
-        return 2
-
-def characterVarietyCheck(password,length): 
+def passwordVarietyValue(password):
     char_list=[]
     uppercase=0    
     lowercase=0    
@@ -45,8 +33,20 @@ def characterVarietyCheck(password,length):
             digit+=1   
         else:
             special+=1
+    return char_list,uppercase,lowercase,digit,special
+        
+def length_checker(length):
+    if length < 8:
+        print("Password length is too short(must be longer)")
+        return 1
+    elif length> 20:
+        print("Password length is long(Good)")  
+        return 3
+    else:    
+        print("Password length is moderate(can be longer)")  
+        return 2
 
-
+def characterVarietyCheck(length,uppercase,lowercase,digit,special,char_list): 
     char_list_length=len(char_list)        
     print("char_list length:",char_list_length)
     if char_list_length < length/2:
@@ -174,11 +174,12 @@ def calculateEntropy(length):
 
 
 common_passwords,english_words=initializeSystem()
-password=password_input()    
+password=password_input() 
+char_list,uppercase,lowercase,digit,special=passwordVarietyValue(password)   
 length=len(password)
 rating=0
 rating+=length_checker(length)
-rating+=characterVarietyCheck(password,length)
+rating+=characterVarietyCheck(length,uppercase,lowercase,digit,special,char_list)
 rating+=commonPasswordCheck(password,common_passwords)
 rating+=dictionaryWordCheck(password,english_words)
 rating+=keyboardPattern(password)
