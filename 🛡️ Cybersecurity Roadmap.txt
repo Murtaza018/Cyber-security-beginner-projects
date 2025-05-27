@@ -1,0 +1,146 @@
+🛡️ Cybersecurity Roadmap
+🟢 1. Beginner Level – Learn the Basics
+🧠 Topics:
+What is Cybersecurity?
+
+CIA Triad (Confidentiality, Integrity, Availability)
+
+Types of cyber attacks: phishing, malware, ransomware, DDoS, etc.
+
+Cybersecurity terminologies: vulnerability, threat, risk, exploit
+
+Networking basics (OSI model, TCP/IP, ports, protocols)
+
+Basics of Linux & Windows OS
+
+🛠️ Tools:
+VirtualBox / VMware (for setting up test labs)
+
+Wireshark (network packet analysis)
+
+Nmap (network scanning)
+
+Windows PowerShell / Linux Bash
+
+📚 Learn From:
+Cybrary
+
+TryHackMe – Complete Beginner
+
+YouTube (e.g., NetworkChuck, The Cyber Mentor)
+
+🏅 Optional Cert:
+CompTIA IT Fundamentals (ITF+)
+
+Google Cybersecurity Certificate (Coursera)
+
+🟡 2. Intermediate Level – Build Practical Skills
+🧠 Topics:
+Network Security
+
+Operating System Security
+
+Cryptography (symmetric, asymmetric, hashing)
+
+Firewalls, VPNs, IDS/IPS
+
+Web application security (OWASP Top 10)
+
+Common tools: Metasploit, Burp Suite
+
+🛠️ Tools:
+Burp Suite (web app security testing)
+
+Metasploit (exploitation framework)
+
+Nessus / OpenVAS (vulnerability scanners)
+
+Hashcat / John the Ripper (password cracking)
+
+Kali Linux / Parrot OS
+
+🧪 Practice Platforms:
+TryHackMe – Junior Penetration Tester Path
+
+Hack The Box
+
+OverTheWire
+
+🏅 Certs:
+CompTIA Security+ (great starting point)
+
+eJPT (Junior Penetration Tester)
+
+🟠 3. Advanced Level – Choose a Specialization
+🔀 Specializations:
+Penetration Testing / Ethical Hacking
+
+Security Operations (SOC Analyst)
+
+Digital Forensics / Incident Response
+
+Malware Analysis / Reverse Engineering
+
+Cloud Security
+
+Red Team / Blue Team
+
+🔧 Advanced Tools:
+Splunk / ELK (SIEM)
+
+Autopsy / FTK (Forensics)
+
+Ghidra / IDA (Reverse engineering)
+
+Snort / Suricata (IDS)
+
+AWS / Azure / GCP (Cloud Security)
+
+🧪 Practice:
+CTF platforms (CTFtime, PicoCTF)
+
+Red vs Blue Labs
+
+Build your own Homelab
+
+🏅 Recommended Certs (per path):
+Role	Certification Example
+Ethical Hacker	CEH, OSCP
+SOC Analyst	CompTIA CySA+, Splunk Core, GCIA
+Forensics / IR	CHFI, GCFA, GNFA
+Cloud Security	AWS Security Specialty, Azure SC-100
+Red/Blue Teaming	CRTP, CRTE, OSEP, OSCE, PNPT
+
+🔵 4. Expert Level – Contribute & Lead
+🧠 Goals:
+Learn advanced exploit development
+
+Contribute to open-source security tools
+
+Lead incident response or red team operations
+
+Mentor others
+
+Write blogs, speak at conferences (e.g., DEF CON, BSides)
+
+🛠️ Optional Advanced Certs:
+OSCE, OSWE (from Offensive Security)
+
+CISSP (for management)
+
+CISM, CISA
+
+📦 Bonus Tips:
+💻 Build Your Portfolio:
+Document labs and CTFs on GitHub
+
+Blog your learning (e.g., Medium)
+
+Share on LinkedIn / Twitter
+
+🤝 Join the Community:
+Reddit: r/cybersecurity, r/netsec
+
+Discords: TryHackMe, InfoSec communities
+
+Twitter: Follow @0xjames, @IppSec, @HackerSploit
