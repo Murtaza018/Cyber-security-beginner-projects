@@ -71,3 +71,11 @@ print_ports("Filtered Ports", filtered_ports)
 print_ports("Unfiltered Ports", unfiltered_ports)
 print_ports("Open|Filtered Ports", open_filtered_ports)
 print_ports("Closed|Filtered Ports", closed_filtered_ports)
+
+flag=False
+for port in open_ports:
+    if common_ports[port][1]==1:
+        print(f"WARNING! Sensitive Port {port}: {common_ports[port][0]} is open via {open_ports[port][1]}")
+        flag=True
+if not flag:
+    print("No sensitive ports open")        
