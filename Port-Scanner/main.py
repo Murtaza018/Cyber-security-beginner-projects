@@ -1,4 +1,7 @@
 import nmap
+from colorama import init, Fore, Style
+
+init()
 
 def print_ports(title, ports_dict):
     print(f"{title}:")
@@ -75,7 +78,7 @@ print_ports("Closed|Filtered Ports", closed_filtered_ports)
 flag=False
 for port in open_ports:
     if common_ports[port][1]==1:
-        print(f"WARNING! Sensitive Port {port}: {common_ports[port][0]} is open via {open_ports[port][1]}")
+        print(Fore.RED + f"WARNING! Sensitive Port {port}: {common_ports[port][0]} is open via {open_ports[port][1]}" + Style.RESET_ALL)
         flag=True
 if not flag:
     print("No sensitive ports open")        
