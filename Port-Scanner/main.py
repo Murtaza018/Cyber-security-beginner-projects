@@ -81,4 +81,4 @@ for port in open_ports:
         print(Fore.RED + f"WARNING! Sensitive Port {port}: {common_ports[port][0]} is open via {open_ports[port][1]}" + Style.RESET_ALL)
         flag=True
 if not flag:
-    print("No sensitive ports open")        
+    print("Congratulations! No sensitive ports open")        
