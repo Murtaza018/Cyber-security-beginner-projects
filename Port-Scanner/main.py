@@ -82,3 +82,11 @@ for port in open_ports:
         flag=True
 if not flag:
     print("Congratulations! No sensitive ports open")        
+
+file_option=input("Do you want to save results to a file?(Yes/No):")
+if (file_option.lower()=="yes"):
+    format_option=input("Enter File Format(txt/json):")
+    if format_option.lower()=="txt":
+        print("txt")
+    elif format_option.lower()=="txt":
+        print("json")
