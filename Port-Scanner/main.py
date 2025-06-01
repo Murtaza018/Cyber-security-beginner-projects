@@ -1,5 +1,7 @@
 import nmap
 from colorama import init, Fore, Style
+import json
+
 
 init()
 
@@ -11,6 +13,46 @@ def print_ports(title, ports_dict):
         for port, service in ports_dict.items():
             print(f"Port {port}: {service[0]} , Protocol: {service[1]}")
     print()
+
+def write_results_to_txt(filename,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports):
+    with open(filename + ".txt", "w") as file:
+
+        def write_section(title, ports_dict):
+            file.write(f"{title}:\n")
+            if ports_dict:
+                for port, service in ports_dict.items():
+                    file.write(f"Port {port}: {service[0]} , Protocol: {service[1]}\n")
+            else:
+                file.write("None\n")
+            file.write("\n")
+
+        write_section("Open Ports", open_ports)
+        write_section("Closed Ports", closed_ports)
+        write_section("Filtered Ports", filtered_ports)
+        write_section("Unfiltered Ports", unfiltered_ports)
+        write_section("Open|Filtered Ports", open_filtered_ports)
+        write_section("Closed|Filtered Ports", closed_filtered_ports)
+
+
+def write_results_to_json(filename,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports):
+    def format_ports_dict(port_dict):
+        if port_dict:
+            return {str(port): {'service': val[0], 'protocol': val[1]} for port, val in port_dict.items()}
+        else:
+            return None
+
+    json_data = {
+        "Open Ports": format_ports_dict(open_ports),
+        "Closed Ports": format_ports_dict(closed_ports),
+        "Filtered Ports": format_ports_dict(filtered_ports),
+        "Unfiltered Ports": format_ports_dict(unfiltered_ports),
+        "Open|Filtered Ports": format_ports_dict(open_filtered_ports),
+        "Closed|Filtered Ports": format_ports_dict(closed_filtered_ports),
+    }
+
+    with open(filename + ".json", "w") as file:
+        json.dump(json_data, file, indent=4)
+
 
 ip_domain=input("Enter IP or Domain:")
 print(ip_domain)
@@ -86,7 +128,8 @@ if not flag:
 file_option=input("Do you want to save results to a file?(Yes/No):")
 if (file_option.lower()=="yes"):
     format_option=input("Enter File Format(txt/json):")
+    file_name=input("Enter File Name(Without Extension):")
     if format_option.lower()=="txt":
-        print("txt")
-    elif format_option.lower()=="txt":
-        print("json")
+        write_results_to_txt(file_name,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports)
+    elif format_option.lower()=="json":
+        write_results_to_json(file_name,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports)
