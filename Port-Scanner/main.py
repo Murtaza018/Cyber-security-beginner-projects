@@ -1,7 +1,7 @@
 import nmap
 from colorama import init, Fore, Style
 import json
-
+import time
 
 init()
 
@@ -82,12 +82,19 @@ print(common_ports)
 
 scanner=nmap.PortScanner()
 ports = ",".join(str(port) for port in common_ports.keys())
+
+start_time=time.time()
+
 if(option==3):
     state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sU -p T:{ports},U:{ports}")
 elif(option==2):
     state = scanner.scan(hosts=ip_domain, arguments=f"-sU -p U:{ports}")
 else:
     state = scanner.scan(hosts=ip_domain, arguments=f"-sS -p T:{ports}")
+
+end_time=time.time()
+duration=end_time-start_time
+
 open_ports={}
 closed_ports={}
 filtered_ports={}
@@ -125,6 +132,7 @@ if option ==2 or option==3:
             closed_filtered_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
      
 print(f"Scan type selected: {'TCP only' if option == '1' else 'UDP only' if option == '2' else 'Both TCP and UDP'}")
+print(f"\nScan completed in {int(duration)} seconds.\n")
 print_ports("Open Ports", open_ports)
 print_ports("Closed Ports", closed_ports)
 print_ports("Filtered Ports", filtered_ports)
