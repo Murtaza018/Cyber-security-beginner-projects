@@ -2,6 +2,7 @@ import nmap
 from colorama import init, Fore, Style
 import json
 import time
+import sys
 
 init()
 
@@ -85,12 +86,20 @@ ports = ",".join(str(port) for port in common_ports.keys())
 
 start_time=time.time()
 
-if(option==3):
-    state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sU -p T:{ports},U:{ports}")
-elif(option==2):
-    state = scanner.scan(hosts=ip_domain, arguments=f"-sU -p U:{ports}")
-else:
-    state = scanner.scan(hosts=ip_domain, arguments=f"-sS -p T:{ports}")
+try:
+    if(option==3):
+        state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sU -p T:{ports},U:{ports}")
+    elif(option==2):
+        state = scanner.scan(hosts=ip_domain, arguments=f"-sU -p U:{ports}")
+    else:
+        state = scanner.scan(hosts=ip_domain, arguments=f"-sS -p T:{ports}")
+except nmap.PortScannerError as e:
+    print(Fore.RED + f"Error: Scan failed – {e}" + Style.RESET_ALL)
+    sys.exit(1)
+except Exception as e:
+    print(Fore.RED + f"Unexpected error: {e}" + Style.RESET_ALL)
+    sys.exit(1)
+
 
 end_time=time.time()
 duration=end_time-start_time
