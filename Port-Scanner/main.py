@@ -7,6 +7,7 @@ import threading
 
 init()
 
+
 def loading_animation(stop_event):
     symbols = ['|', '/', '-', '\\']
     i = 0
@@ -77,7 +78,6 @@ def write_results_to_json(filename,open_ports,closed_ports, filtered_ports, unfi
 
 def main():
     ip_domain=input("Enter IP or Domain:")
-
     print("Choose Scan Type (Wrong option number will automatically choose default)")
     print("1-TCP (Default)")
     print("2-UDP")
@@ -100,6 +100,11 @@ def main():
     3306 : ["MySQL",0],
     3389 : ["RDP",1],
     }
+    full_range = input("Scan full port range? (Yes/No): ")
+    if full_range.lower() == 'yes':
+        ports = "1-65535"
+    else:
+        ports = ",".join(str(port) for port in common_ports.keys())
 
     # Start loading animation in a thread
     stop_event = threading.Event()
@@ -107,7 +112,6 @@ def main():
     loading_thread.start()
 
     scanner=nmap.PortScanner()
-    ports = ",".join(str(port) for port in common_ports.keys())
 
     start_time=time.time()
 
@@ -189,7 +193,7 @@ def main():
 
     flag=False
     for port in open_ports:
-        if common_ports[port][1]==1:
+        if port in common_ports and common_ports[port][1]==1:
             print(Fore.RED + f"WARNING! Sensitive Port {port}: {common_ports[port][0]} is open via {open_ports[port][1]}" + Style.RESET_ALL)
             flag=True
     if not flag:
