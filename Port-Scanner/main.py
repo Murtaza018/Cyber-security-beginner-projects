@@ -75,128 +75,134 @@ def write_results_to_json(filename,open_ports,closed_ports, filtered_ports, unfi
     with open(filename + ".json", "w") as file:
         json.dump(json_data, file, indent=4)
 
+def main():
+    ip_domain=input("Enter IP or Domain:")
 
-ip_domain=input("Enter IP or Domain:")
-
-print("Choose Scan Type (Wrong option number will automatically choose default)")
-print("1-TCP (Default)")
-print("2-UDP")
-print("3-Both TCP and UDP")
-option=input("Enter option number:")
-option = option.strip()
-if option not in [1,2,3]:
-    option = 1
+    print("Choose Scan Type (Wrong option number will automatically choose default)")
+    print("1-TCP (Default)")
+    print("2-UDP")
+    print("3-Both TCP and UDP")
+    option=input("Enter option number:")
+    option = option.strip()
+    if option not in [1,2,3]:
+        option = 1
 
 
-common_ports={
-21 :["FTP",1],
-22 :["SSH",1],
-23 : ["Telnet",1],
-25 : ["SMTP",0],
-53 : ["DNS",0],
-80 : ["HTTP",0],
-443 : ["HTTPS",0],
-445:["SMB",1],
-3306 : ["MySQL",0],
-3389 : ["RDP",1],
-}
+    common_ports={
+    21 :["FTP",1],
+    22 :["SSH",1],
+    23 : ["Telnet",1],
+    25 : ["SMTP",0],
+    53 : ["DNS",0],
+    80 : ["HTTP",0],
+    443 : ["HTTPS",0],
+    445:["SMB",1],
+    3306 : ["MySQL",0],
+    3389 : ["RDP",1],
+    }
 
-# Start loading animation in a thread
-stop_event = threading.Event()
-loading_thread = threading.Thread(target=loading_animation, args=(stop_event,))
-loading_thread.start()
+    # Start loading animation in a thread
+    stop_event = threading.Event()
+    loading_thread = threading.Thread(target=loading_animation, args=(stop_event,))
+    loading_thread.start()
 
-scanner=nmap.PortScanner()
-ports = ",".join(str(port) for port in common_ports.keys())
+    scanner=nmap.PortScanner()
+    ports = ",".join(str(port) for port in common_ports.keys())
 
-start_time=time.time()
+    start_time=time.time()
 
-# Do the actual scan
-try:
+    # Do the actual scan
     try:
-        if(option==3):
-            state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sU -p T:{ports},U:{ports}")
-        elif(option==2):
-            state = scanner.scan(hosts=ip_domain, arguments=f"-sU -p U:{ports}")
-        else:
-            state = scanner.scan(hosts=ip_domain, arguments=f"-sS -p T:{ports}")
-    except nmap.PortScannerError as e:
-        print(Fore.RED + f"Error: Scan failed – {e}" + Style.RESET_ALL)
+        try:
+            if(option==3):
+                state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sU -p T:{ports},U:{ports}")
+            elif(option==2):
+                state = scanner.scan(hosts=ip_domain, arguments=f"-sU -p U:{ports}")
+            else:
+                state = scanner.scan(hosts=ip_domain, arguments=f"-sS -p T:{ports}")
+        except nmap.PortScannerError as e:
+            print(Fore.RED + f"Error: Scan failed – {e}" + Style.RESET_ALL)
+            retry = input("Scan failed. Try again? (Yes/No): ")
+            if retry.lower() == 'yes':
+                main()
+            sys.exit(1)
+        except Exception as e:
+            print(Fore.RED + f"Unexpected error: {e}" + Style.RESET_ALL)
+            sys.exit(1)
+    finally:
+        stop_event.set()
+        loading_thread.join()
+
+
+    end_time=time.time()
+    duration=end_time-start_time
+
+    if ip_domain not in scanner.all_hosts():
+        print(Fore.RED + f"Error: Host '{ip_domain}' is unreachable or unknown." + Style.RESET_ALL)
         sys.exit(1)
-    except Exception as e:
-        print(Fore.RED + f"Unexpected error: {e}" + Style.RESET_ALL)
-        sys.exit(1)
-finally:
-    stop_event.set()
-    loading_thread.join()
 
 
-end_time=time.time()
-duration=end_time-start_time
+    open_ports={}
+    closed_ports={}
+    filtered_ports={}
+    unfiltered_ports={}
+    open_filtered_ports={}
+    closed_filtered_ports={}
+    if option !=2:
+        for port in scanner[ip_domain]['tcp']:
+            if scanner[ip_domain]['tcp'][port]['state'] == 'open':
+                open_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']  
+            elif scanner[ip_domain]['tcp'][port]['state'] == 'closed':    
+                closed_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
+            elif scanner[ip_domain]['tcp'][port]['state'] == 'filtered':
+                filtered_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
+            elif scanner[ip_domain]['tcp'][port]['state'] == 'unfiltered':
+                unfiltered_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
+            elif scanner[ip_domain]['tcp'][port]['state'] == 'open|filtered':
+                open_filtered_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
+            elif scanner[ip_domain]['tcp'][port]['state'] == 'closed|filtered':
+                closed_filtered_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
 
-if ip_domain not in scanner.all_hosts():
-    print(Fore.RED + f"Error: Host '{ip_domain}' is unreachable or unknown." + Style.RESET_ALL)
-    sys.exit(1)
+    if option ==2 or option==3:
+        for port in scanner[ip_domain]['udp']:
+            if scanner[ip_domain]['udp'][port]['state'] == 'open':
+                open_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']  
+            elif scanner[ip_domain]['udp'][port]['state'] == 'closed':    
+                closed_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
+            elif scanner[ip_domain]['udp'][port]['state'] == 'filtered':
+                filtered_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
+            elif scanner[ip_domain]['udp'][port]['state'] == 'unfiltered':
+                unfiltered_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
+            elif scanner[ip_domain]['udp'][port]['state'] == 'open|filtered':
+                open_filtered_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
+            elif scanner[ip_domain]['udp'][port]['state'] == 'closed|filtered':
+                closed_filtered_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
+        
+    print(f"Scan type selected: {'TCP only' if option == '1' else 'UDP only' if option == '2' else 'Both TCP and UDP'}")
+    print(f"\nScan completed in {int(duration)} seconds.\n")
+    print_ports("Open Ports", open_ports)
+    print_ports("Closed Ports", closed_ports)
+    print_ports("Filtered Ports", filtered_ports)
+    print_ports("Unfiltered Ports", unfiltered_ports)
+    print_ports("Open|Filtered Ports", open_filtered_ports)
+    print_ports("Closed|Filtered Ports", closed_filtered_ports)
 
+    flag=False
+    for port in open_ports:
+        if common_ports[port][1]==1:
+            print(Fore.RED + f"WARNING! Sensitive Port {port}: {common_ports[port][0]} is open via {open_ports[port][1]}" + Style.RESET_ALL)
+            flag=True
+    if not flag:
+        print("Congratulations! No sensitive ports open")        
 
-open_ports={}
-closed_ports={}
-filtered_ports={}
-unfiltered_ports={}
-open_filtered_ports={}
-closed_filtered_ports={}
-if option !=2:
-    for port in scanner[ip_domain]['tcp']:
-        if scanner[ip_domain]['tcp'][port]['state'] == 'open':
-            open_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']  
-        elif scanner[ip_domain]['tcp'][port]['state'] == 'closed':    
-            closed_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
-        elif scanner[ip_domain]['tcp'][port]['state'] == 'filtered':
-            filtered_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
-        elif scanner[ip_domain]['tcp'][port]['state'] == 'unfiltered':
-            unfiltered_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
-        elif scanner[ip_domain]['tcp'][port]['state'] == 'open|filtered':
-            open_filtered_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
-        elif scanner[ip_domain]['tcp'][port]['state'] == 'closed|filtered':
-            closed_filtered_ports[port]=[scanner[ip_domain]['tcp'][port]['name'],'tcp']
+    file_option=input("Do you want to save results to a file?(Yes/No):")
+    if (file_option.lower()=="yes"):
+        format_option=input("Enter File Format(txt/json):")
+        file_name=input("Enter File Name(Without Extension):")
+        if format_option.lower()=="txt":
+            write_results_to_txt(file_name,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports)
+        elif format_option.lower()=="json":
+            write_results_to_json(file_name,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports)
 
-if option ==2 or option==3:
-    for port in scanner[ip_domain]['udp']:
-        if scanner[ip_domain]['udp'][port]['state'] == 'open':
-            open_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']  
-        elif scanner[ip_domain]['udp'][port]['state'] == 'closed':    
-            closed_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
-        elif scanner[ip_domain]['udp'][port]['state'] == 'filtered':
-            filtered_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
-        elif scanner[ip_domain]['udp'][port]['state'] == 'unfiltered':
-            unfiltered_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
-        elif scanner[ip_domain]['udp'][port]['state'] == 'open|filtered':
-            open_filtered_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
-        elif scanner[ip_domain]['udp'][port]['state'] == 'closed|filtered':
-            closed_filtered_ports[port]=[scanner[ip_domain]['udp'][port]['name'],'udp']
-     
-print(f"Scan type selected: {'TCP only' if option == '1' else 'UDP only' if option == '2' else 'Both TCP and UDP'}")
-print(f"\nScan completed in {int(duration)} seconds.\n")
-print_ports("Open Ports", open_ports)
-print_ports("Closed Ports", closed_ports)
-print_ports("Filtered Ports", filtered_ports)
-print_ports("Unfiltered Ports", unfiltered_ports)
-print_ports("Open|Filtered Ports", open_filtered_ports)
-print_ports("Closed|Filtered Ports", closed_filtered_ports)
-
-flag=False
-for port in open_ports:
-    if common_ports[port][1]==1:
-        print(Fore.RED + f"WARNING! Sensitive Port {port}: {common_ports[port][0]} is open via {open_ports[port][1]}" + Style.RESET_ALL)
-        flag=True
-if not flag:
-    print("Congratulations! No sensitive ports open")        
-
-file_option=input("Do you want to save results to a file?(Yes/No):")
-if (file_option.lower()=="yes"):
-    format_option=input("Enter File Format(txt/json):")
-    file_name=input("Enter File Name(Without Extension):")
-    if format_option.lower()=="txt":
-        write_results_to_txt(file_name,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports)
-    elif format_option.lower()=="json":
-        write_results_to_json(file_name,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports)
+if __name__ == '__main__':
+    main()
