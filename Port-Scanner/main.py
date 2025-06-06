@@ -3,17 +3,38 @@ from colorama import init, Fore, Style
 import json
 import time
 import sys
+import threading
 
 init()
 
+def loading_animation(stop_event):
+    symbols = ['|', '/', '-', '\\']
+    i = 0
+    while not stop_event.is_set():
+        print(f"\rScanning... {symbols[i % len(symbols)]}", end="")
+        time.sleep(0.1)
+        i += 1
+    print("\rScan complete!          ")
+
+
 def print_ports(title, ports_dict):
-    print(f"{title}:")
+    color = {
+        "Open Ports": Fore.GREEN,
+        "Closed Ports": Fore.RED,
+        "Filtered Ports": Fore.YELLOW,
+        "Unfiltered Ports": Fore.BLUE,
+        "Open|Filtered Ports": Fore.MAGENTA,
+        "Closed|Filtered Ports": Fore.CYAN
+    }.get(title, Fore.WHITE)
+
+    print(f"{color}{title}:{Style.RESET_ALL}")
     if not ports_dict:
         print(" (none)")
     else:
         for port, service in ports_dict.items():
-            print(f"Port {port}: {service[0]} , Protocol: {service[1]}")
+            print(f"{color}Port {port}: {service[0]} , Protocol: {service[1]}{Style.RESET_ALL}")
     print()
+
 
 def write_results_to_txt(filename,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports):
     with open(filename + ".txt", "w") as file:
@@ -56,7 +77,7 @@ def write_results_to_json(filename,open_ports,closed_ports, filtered_ports, unfi
 
 
 ip_domain=input("Enter IP or Domain:")
-print(ip_domain)
+
 print("Choose Scan Type (Wrong option number will automatically choose default)")
 print("1-TCP (Default)")
 print("2-UDP")
@@ -79,30 +100,44 @@ common_ports={
 3306 : ["MySQL",0],
 3389 : ["RDP",1],
 }
-print(common_ports)
+
+# Start loading animation in a thread
+stop_event = threading.Event()
+loading_thread = threading.Thread(target=loading_animation, args=(stop_event,))
+loading_thread.start()
 
 scanner=nmap.PortScanner()
 ports = ",".join(str(port) for port in common_ports.keys())
 
 start_time=time.time()
 
+# Do the actual scan
 try:
-    if(option==3):
-        state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sU -p T:{ports},U:{ports}")
-    elif(option==2):
-        state = scanner.scan(hosts=ip_domain, arguments=f"-sU -p U:{ports}")
-    else:
-        state = scanner.scan(hosts=ip_domain, arguments=f"-sS -p T:{ports}")
-except nmap.PortScannerError as e:
-    print(Fore.RED + f"Error: Scan failed – {e}" + Style.RESET_ALL)
-    sys.exit(1)
-except Exception as e:
-    print(Fore.RED + f"Unexpected error: {e}" + Style.RESET_ALL)
-    sys.exit(1)
+    try:
+        if(option==3):
+            state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sU -p T:{ports},U:{ports}")
+        elif(option==2):
+            state = scanner.scan(hosts=ip_domain, arguments=f"-sU -p U:{ports}")
+        else:
+            state = scanner.scan(hosts=ip_domain, arguments=f"-sS -p T:{ports}")
+    except nmap.PortScannerError as e:
+        print(Fore.RED + f"Error: Scan failed – {e}" + Style.RESET_ALL)
+        sys.exit(1)
+    except Exception as e:
+        print(Fore.RED + f"Unexpected error: {e}" + Style.RESET_ALL)
+        sys.exit(1)
+finally:
+    stop_event.set()
+    loading_thread.join()
 
 
 end_time=time.time()
 duration=end_time-start_time
+
+if ip_domain not in scanner.all_hosts():
+    print(Fore.RED + f"Error: Host '{ip_domain}' is unreachable or unknown." + Style.RESET_ALL)
+    sys.exit(1)
+
 
 open_ports={}
 closed_ports={}
@@ -164,5 +199,4 @@ if (file_option.lower()=="yes"):
     if format_option.lower()=="txt":
         write_results_to_txt(file_name,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports)
     elif format_option.lower()=="json":
-        write_results_to_json(file_name,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports)
         write_results_to_json(file_name,open_ports,closed_ports, filtered_ports, unfiltered_ports, open_filtered_ports,closed_filtered_ports)
