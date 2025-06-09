@@ -102,6 +102,7 @@ def main():
     }
     full_range = input("Scan full port range? (Yes/No): ")
     if full_range.lower() == 'yes':
+        print(Fore.YELLOW + "[!] Full port range scan selected. This may take several minutes..." + Style.RESET_ALL)
         ports = "1-65535"
     else:
         ports = ",".join(str(port) for port in common_ports.keys())
@@ -119,11 +120,11 @@ def main():
     try:
         try:
             if(option==3):
-                state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sU -p T:{ports},U:{ports}")
+                state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sU -sV -p T:{ports},U:{ports} ")
             elif(option==2):
-                state = scanner.scan(hosts=ip_domain, arguments=f"-sU -p U:{ports}")
+                state = scanner.scan(hosts=ip_domain, arguments=f"-sU -sV -p U:{ports}")
             else:
-                state = scanner.scan(hosts=ip_domain, arguments=f"-sS -p T:{ports}")
+                state = scanner.scan(hosts=ip_domain, arguments=f"-sS -sV -p T:{ports}")
         except nmap.PortScannerError as e:
             print(Fore.RED + f"Error: Scan failed – {e}" + Style.RESET_ALL)
             retry = input("Scan failed. Try again? (Yes/No): ")
