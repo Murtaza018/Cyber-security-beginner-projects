@@ -200,6 +200,14 @@ def main():
     if not flag:
         print("Congratulations! No sensitive ports open")        
 
+    print("Summary:")
+    print("Open Ports: ",len(open_ports))
+    print("Closed Ports: ",len(closed_ports))
+    print("Filtered Ports: ",len(filtered_ports))
+    print("Unfiltered Ports: ",len(unfiltered_ports))
+    print("Open Filtered Ports: ",len(open_filtered_ports))
+    print("Closed Filtered Ports: ",len(closed_filtered_ports))
+
     file_option=input("Do you want to save results to a file?(Yes/No):")
     if (file_option.lower()=="yes"):
         format_option=input("Enter File Format(txt/json):")
