@@ -15,7 +15,9 @@ print("Select Algorithm")
 print("0-Use All Algorithms")    
 print("1-Caeser Cipher")    
 print("2-Vigenere Cipher")    
-print("3-XOR")    
+print("3-Atbash Cipher")    
+print("4-XOR")    
+print("5-ROT13")    
 if opt==1:
     print("Encryption!")    
 if opt==2:
