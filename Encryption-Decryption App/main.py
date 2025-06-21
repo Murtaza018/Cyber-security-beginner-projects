@@ -16,10 +16,25 @@ def selectAlgorithm():
     print("5-ROT13")
     opt=int(input("Enter option:")) 
     return opt
+def CaeserEncryptNum(msg,shift):
+    encrypted = ""
+    for char in msg:
+        if char.isalpha():
+            base = ord('A') if char.isupper() else ord('a')
+            encrypted += chr((ord(char) - base + shift) % 26 + base)
+        else:
+            encrypted += char
+    print(f"Encryption with Caesar Cipher using shift={shift}: {encrypted}")
+  
+
+def CaeserEncryptRange(msg,shift_lower,shift_upper):
+    for j in range(shift_lower,shift_upper):
+        for i in range(len(msg)):
+            msg[i]+=j
 
 def CaeserCipher(msg,opt):
     opt2=-1
-    while opt2!=0 or opt2!=1:
+    while opt2!=0 and opt2!=1:
         opt2=int(input("Enter shift number(0) or shift range(1):"))
     if(opt2==0):
         shift=int(input("Enter shift number:"))
@@ -28,7 +43,7 @@ def CaeserCipher(msg,opt):
         shift_upper=int(input("Enter upper shift number:"))    
     if opt==1:
         if opt2==0:
-            print("encryption with num")    
+            CaeserEncryptNum(msg,shift)    
         if opt2==1:
             print("encryption with range")    
     elif opt==2:
@@ -39,7 +54,7 @@ def CaeserCipher(msg,opt):
 
 msg=input("Enter message:")
 opt=0
-while opt!=1 or opt!=2:
+while opt!=1 and opt!=2:
     opt=selectType()
 opt2=-1
 while opt2<0 or opt2>5:
@@ -48,7 +63,7 @@ while opt2<0 or opt2>5:
 if opt2==0:
     print("All algorithms")
 elif opt2==1:
-    CaserCipher(msg,opt)
+    CaeserCipher(msg,opt)
 elif opt2==2:
     print("Vigenere Cipher")
 elif opt2==3:
