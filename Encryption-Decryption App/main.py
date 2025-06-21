@@ -17,6 +17,26 @@ def selectAlgorithm():
     opt=int(input("Enter option:")) 
     return opt
 
+def CaeserCipher(msg,opt):
+    opt2=-1
+    while opt2!=0 or opt2!=1:
+        opt2=int(input("Enter shift number(0) or shift range(1):"))
+    if(opt2==0):
+        shift=int(input("Enter shift number:"))
+    else:
+        shift_lower=int(input("Enter lower shift number:"))    
+        shift_upper=int(input("Enter upper shift number:"))    
+    if opt==1:
+        if opt2==0:
+            print("encryption with num")    
+        if opt2==1:
+            print("encryption with range")    
+    elif opt==2:
+        if opt2==0:
+            print("decryption with num")    
+        if opt2==1:
+            print("decryption with range")    
+
 msg=input("Enter message:")
 opt=0
 while opt!=1 or opt!=2:
@@ -28,7 +48,7 @@ while opt2<0 or opt2>5:
 if opt2==0:
     print("All algorithms")
 elif opt2==1:
-    print("Caeser Cipher")
+    CaserCipher(msg,opt)
 elif opt2==2:
     print("Vigenere Cipher")
 elif opt2==3:
