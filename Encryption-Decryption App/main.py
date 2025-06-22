@@ -36,6 +36,11 @@ def CaeserEncryptRange(msg,shift_lower,shift_upper):
 def CaeserDecryptNum(msg,shift):
     return CaeserEncryptNum(msg,-shift)
 
+def CaeserDecryptRange(msg,shift_lower,shift_upper):
+    decrypted_range=[]
+    for j in range(shift_lower,shift_upper):
+        decrypted_range.append(CaeserEncryptNum(msg,-j))
+    return decrypted_range
 
 def CaeserCipher(msg,opt):
     opt2=-1
@@ -48,7 +53,7 @@ def CaeserCipher(msg,opt):
             print(f"Encryption with Caesar Cipher using shift={shift}: {encrypted_num}")  
         elif opt==2:
             decrypted_num=CaeserDecryptNum(msg,shift)   
-            print(f"Encryption with Caesar Cipher using shift={shift}: {decrypted_num}")      
+            print(f"Decryption with Caesar Cipher using shift={shift}: {decrypted_num}")      
 
     else:
         shift_lower=int(input("Enter lower shift number:"))    
@@ -57,7 +62,8 @@ def CaeserCipher(msg,opt):
             encrypted_range=CaeserEncryptRange(msg,shift_lower,shift_upper)  
             print(f"Encryption with Caesar Cipher using shift range={shift_lower}-{shift_upper}: {encrypted_range}") 
         elif opt==2:
-            print("decryption with range")   
+            decrypted_range=CaeserDecryptRange(msg,shift_lower,shift_upper)  
+            print(f"Decryption with Caesar Cipher using shift range={shift_lower}-{shift_upper}: {decrypted_range}")  
 
 msg=input("Enter message:")
 opt=0
