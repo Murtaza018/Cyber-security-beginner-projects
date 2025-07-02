@@ -65,6 +65,15 @@ def CaeserCipher(msg,opt):
             decrypted_range=CaeserDecryptRange(msg,shift_lower,shift_upper)  
             print(f"Decryption with Caesar Cipher using shift range={shift_lower}-{shift_upper}: {decrypted_range}")  
 
+def VigenereCipher(msg,opt):
+    opt2=-1
+    while opt2!=0 and opt2!=1:
+        opt2=int(input("Use Default Key(0) or Customized Key(1):"))
+    if opt2==0:
+        key="KEY"
+    else:
+        key=str(input("Enter Key:"))        
+
 msg=input("Enter message:")
 opt=0
 while opt!=1 and opt!=2:
@@ -78,7 +87,7 @@ if opt2==0:
 elif opt2==1:
     CaeserCipher(msg,opt)
 elif opt2==2:
-    print("Vigenere Cipher")
+    VigenereCipher(msg,opt)
 elif opt2==3:
     print("Atbash Cipher")
 elif opt2==4:
