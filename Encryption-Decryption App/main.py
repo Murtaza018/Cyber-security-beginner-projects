@@ -64,7 +64,10 @@ def CaeserCipher(msg,opt):
         elif opt==2:
             decrypted_range=CaeserDecryptRange(msg,shift_lower,shift_upper)  
             print(f"Decryption with Caesar Cipher using shift range={shift_lower}-{shift_upper}: {decrypted_range}")  
-
+def VigenereCipherEncrypt(msg,key):
+    print("Vigenere encrypt")
+def VigenereCipherDecrypt(msg,key):
+    print("Vigenere Decrypt")    
 def VigenereCipher(msg,opt):
     opt2=-1
     while opt2!=0 and opt2!=1:
@@ -72,7 +75,15 @@ def VigenereCipher(msg,opt):
     if opt2==0:
         key="KEY"
     else:
-        key=str(input("Enter Key:"))        
+        key=str(input("Enter Key:"))    
+    if opt==1:
+        encrypted_default_msg=VigenereCipherEncrypt(msg,key)
+        print(f"Encryption with Vigenere Cipher using Default Key: {encrypted_default_msg}") 
+    elif opt==2:
+        decrypted_default_msg=VigenereCipherDecrypt(msg,key)
+        print(f"Decryption with Vigenere Cipher using Default Key: {decrypted_default_msg}") 
+
+
 
 msg=input("Enter message:")
 opt=0
