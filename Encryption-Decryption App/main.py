@@ -80,8 +80,23 @@ def VigenereCipherEncrypt(msg, key):
 
     return encrypted
 
-def VigenereCipherDecrypt(msg,key):
-    print("Vigenere Decrypt")    
+def VigenereCipherDecrypt(msg, key):
+    decrypted = ""
+    key = key.lower()
+    key_index = 0
+
+    for char in msg:
+        if char.isalpha():
+            base = ord('A') if char.isupper() else ord('a')
+            shift = ord(key[key_index % len(key)]) - ord('a')
+            decrypted_char = chr((ord(char) - base - shift) % 26 + base)
+            decrypted += decrypted_char
+            key_index += 1
+        else:
+            decrypted += char 
+
+    return decrypted
+  
 def VigenereCipher(msg,opt):
     opt2=-1
     while opt2!=0 and opt2!=1:
