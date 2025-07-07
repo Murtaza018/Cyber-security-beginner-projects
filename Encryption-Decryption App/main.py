@@ -64,8 +64,22 @@ def CaeserCipher(msg,opt):
         elif opt==2:
             decrypted_range=CaeserDecryptRange(msg,shift_lower,shift_upper)  
             print(f"Decryption with Caesar Cipher using shift range={shift_lower}-{shift_upper}: {decrypted_range}")  
-def VigenereCipherEncrypt(msg,key):
-    print("Vigenere encrypt")
+def VigenereCipherEncrypt(msg, key):
+    encrypted = ""
+    key_index = 0
+    key = key.lower() 
+
+    for char in msg:
+        if char.isalpha():
+            base = ord('A') if char.isupper() else ord('a')
+            shift = ord(key[key_index % len(key)]) - ord('a')
+            encrypted += chr((ord(char) - base + shift) % 26 + base)
+            key_index += 1
+        else:
+            encrypted += char
+
+    return encrypted
+
 def VigenereCipherDecrypt(msg,key):
     print("Vigenere Decrypt")    
 def VigenereCipher(msg,opt):
