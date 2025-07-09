@@ -112,6 +112,23 @@ def VigenereCipher(msg,opt):
         decrypted_default_msg=VigenereCipherDecrypt(msg,key)
         print(f"Decryption with Vigenere Cipher using Default Key: {decrypted_default_msg}") 
 
+def AtbashCipherFunction(msg):
+    result = ""
+    for char in msg:
+        if char.isupper():
+            result += chr(ord('Z') - (ord(char) - ord('A')))
+        elif char.islower():
+            result += chr(ord('z') - (ord(char) - ord('a')))
+        else:
+            result += char  # Keep spaces, punctuation unchanged
+    return result
+
+def AtbashCipher(msg,opt):
+    Cipher_msg=AtbashCipherFunction(msg)
+    if opt==1:
+        print(f"Encryption with Vigenere Cipher using Default Key: {Cipher_msg}") 
+    elif opt==2:
+        print(f"Decryption with Vigenere Cipher using Default Key: {Cipher_msg}") 
 
 
 msg=input("Enter message:")
@@ -129,7 +146,7 @@ elif opt2==1:
 elif opt2==2:
     VigenereCipher(msg,opt)
 elif opt2==3:
-    print("Atbash Cipher")
+    AtbashCipher(msg,opt)
 elif opt2==4:
     print("XOR")
 elif opt2==5:
