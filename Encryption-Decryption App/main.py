@@ -130,29 +130,24 @@ def AtbashCipher(msg,opt):
     elif opt==2:
         print(f"Decryption with Atbash Cipher: {Cipher_msg}") 
 
-def XORCipher(msg):
-    opt2=-1
-    while opt2!=0 and opt2!=1:
-        opt2=int(input("Use Default Key(0) or Customized Key(1):"))
-    if opt2==0:
-        key="KEY"
-    else:
-        key=str(input("Enter Key:"))
+def XORCipher(msg, mode):
+  
+    opt2 = -1
+    while opt2 != 0 and opt2 != 1:
+        opt2 = int(input("Use Default Key(0) or Customized Key(1): "))
+
+    key = "KEY" if opt2 == 0 else input("Enter Key: ")
 
     result = ""
     for i in range(len(msg)):
         result += chr(ord(msg[i]) ^ ord(key[i % len(key)]))
-    if opt==1:
-        if opt2==0:
-            print(f"Encryption with Vigenere Cipher using Default Key: {result}")
-        else:
-            print(f"Encryption with Vigenere Cipher using Customized Key: {result}")
 
-    elif opt==2:
-        if opt2==0:
-            print(f"Decryption with Vigenere Cipher using Default Key: {result}")
-        else:
-            print(f"Decryption with Vigenere Cipher using Customized Key: {result}")
+    if mode == 1:
+        print(f"\nEncryption with XOR Cipher using {'Default' if opt2 == 0 else 'Customized'} Key: {result}")
+    elif mode == 2:
+        print(f"\nDecryption with XOR Cipher using {'Default' if opt2 == 0 else 'Customized'} Key: {result}")
+
+
 
 msg=input("Enter message:")
 opt=0
@@ -169,9 +164,9 @@ elif opt2==1:
 elif opt2==2:
     VigenereCipher(msg,opt)
 elif opt2==3:
-    AtbashCipher(msg)
+    AtbashCipher(msg,opt)
 elif opt2==4:
-    XORCipher(msg)
+    XORCipher(msg,opt)
 elif opt2==5:
     print("ROT13")
         
