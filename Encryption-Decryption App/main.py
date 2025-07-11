@@ -147,7 +147,8 @@ def XORCipher(msg, mode):
     elif mode == 2:
         print(f"\nDecryption with XOR Cipher using {'Default' if opt2 == 0 else 'Customized'} Key: {result}")
 
-
+def ROT13Cipher(msg,opt):
+    print("ROT13")
 
 msg=input("Enter message:")
 opt=0
