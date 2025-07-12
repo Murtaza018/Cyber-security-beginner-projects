@@ -148,7 +148,12 @@ def XORCipher(msg, mode):
         print(f"\nDecryption with XOR Cipher using {'Default' if opt2 == 0 else 'Customized'} Key: {result}")
 
 def ROT13Cipher(msg,opt):
-    print("ROT13")
+    if opt==1:
+        encrypted=CaeserEncryptNum(msg,13)
+        print(f"Encryption with ROT13 Cipher: {encrypted}") 
+    if opt==2:
+        decrypted=CaeserEncryptNum(msg,-13)
+        print(f"Decryption with ROT13 Cipher: {decrypted}")
 
 msg=input("Enter message:")
 opt=0
