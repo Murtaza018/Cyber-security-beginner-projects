@@ -5,3 +5,4 @@ def packet_callback(packet):
 
 
 sniff(prn=packet_callback, count=0)
+sniff(filter="tcp port 80", prn=packet_callback, count=0)
