@@ -7,7 +7,8 @@ def packet_callback(packet):
 sniff(prn=packet_callback, count=0)
 sniff(filter="tcp port 80", prn=packet_callback, count=0)
 
-
+max_filters=19
+opt=0
 print("Select a filter:")
 print("1-TCP")
 print("2-UDP")
@@ -17,3 +18,24 @@ print("5-Certain IP")
 print("6-All IP packets")
 print("7-ARP packets")
 print("8-IPv6 Packets")
+print("9-HTTP")
+print("10-HTTPS")
+print("11-DNS")
+print("12-SSH")
+print("13-NTP")
+print("14-HTTP over TCP")
+print("15-DNS over TCP")
+print("16-DNS over UDP")
+print("17-HTTP or HTTPS")
+print("18-HTTP to/from specific IP")
+print("19-HTTPS to/from specific IP")
+
+while opt<1 and opt>max_filters:
+    opt=int(input("Enter option number:"))
+
+if opt==1:
+    filters="tcp"
+elif opt==2:
+    filters="udp"        
+elif opt==3:
+    filters="icmp"        
