@@ -38,4 +38,20 @@ if opt==1:
 elif opt==2:
     filters="udp"        
 elif opt==3:
-    filters="icmp"        
+    filters="icmp"    
+elif opt==4:
+    port=int(input("Enter Port:"))
+    filters=f'port {port}' 
+elif opt==5:
+    IP=str(input("Enter IP:"))
+    filter=f'host {IP}'
+elif opt==6:
+    filter="ip"
+elif opt==7:
+    filter="arp"               
+elif opt==8:
+    filter="ip6"
+elif opt==9:
+    filter="port 80"                   
+elif opt==9:
+    filter="port 443"                   
