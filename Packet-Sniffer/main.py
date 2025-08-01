@@ -53,5 +53,25 @@ elif opt==8:
     filter="ip6"
 elif opt==9:
     filter="port 80"                   
-elif opt==9:
-    filter="port 443"                   
+elif opt==10:
+    filter="port 443"   
+elif opt==11:
+    filter="port 53"                    
+elif opt==12:
+    filter="tcp port 22"                    
+elif opt==13:
+    filter="udp port 123"  
+elif opt==14:
+    filter="tcp and port 80"                      
+elif opt==15:
+    filter="tcp and port 53"                      
+elif opt==16:
+    filter="udp and port 53"                      
+elif opt==17:
+    filter="tcp and (port 80 or port 443)"
+elif opt==18:
+    IP=str(input("Enter IP:"))
+    filter=f'host {IP} and port 80'                      
+elif opt==19:
+    IP=str(input("Enter IP:"))
+    filter=f'host {IP} and port 443'                      
