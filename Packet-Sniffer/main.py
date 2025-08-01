@@ -4,9 +4,6 @@ def packet_callback(packet):
     print(packet.summary())
 
 
-sniff(prn=packet_callback, count=0)
-sniff(filter="tcp port 80", prn=packet_callback, count=0)
-
 max_filters=19
 opt=0
 print("Select a filter:")
@@ -30,9 +27,10 @@ print("17-HTTP or HTTPS")
 print("18-HTTP to/from specific IP")
 print("19-HTTPS to/from specific IP")
 
-while opt<1 and opt>max_filters:
+while opt<1 or opt>max_filters:
     opt=int(input("Enter option number:"))
 
+filter=""
 if opt==1:
     filters="tcp"
 elif opt==2:
@@ -75,3 +73,6 @@ elif opt==18:
 elif opt==19:
     IP=str(input("Enter IP:"))
     filter=f'host {IP} and port 443'                      
+
+
+sniff(filter=filter, prn=packet_callback, count=0)    
