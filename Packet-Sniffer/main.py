@@ -75,6 +75,6 @@ elif opt==19:
     IP=str(input("Enter IP:"))
     filter=f'host {IP} and port 443'                      
 
-
-sniff(filter=filter, prn=packet_callback, count=0) 
+count = int(input("Enter number of packets to capture (0 for unlimited): "))
+sniff(filter=filter, prn=packet_callback, count=0 if count == 0 else count)
  
