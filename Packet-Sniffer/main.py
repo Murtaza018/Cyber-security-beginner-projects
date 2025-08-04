@@ -1,7 +1,8 @@
 from scapy.all import sniff
+from datetime import datetime
 
 def packet_callback(packet):
-    print(packet.summary())
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] {packet.summary()}")
 
 
 max_filters=19
@@ -76,4 +77,4 @@ elif opt==19:
 
 
 sniff(filter=filter, prn=packet_callback, count=0) 
-#packet info implementation left   
+ 
