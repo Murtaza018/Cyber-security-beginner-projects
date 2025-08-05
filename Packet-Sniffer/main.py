@@ -2,7 +2,10 @@ from scapy.all import sniff
 from datetime import datetime
 
 def packet_callback(packet):
-    print(f"[{datetime.now().strftime('%H:%M:%S')}] {packet.summary()}")
+    if verbose:
+        packet.show()
+    else:
+        print(f"[{datetime.now().strftime('%H:%M:%S')}] {packet.summary()}")
 
 
 max_filters=19
@@ -75,6 +78,7 @@ elif opt==19:
     IP=str(input("Enter IP:"))
     filter=f'host {IP} and port 443'                      
 
+verbose = input("Show full packet details? (y/n): ").lower() == 'y'
 count = int(input("Enter number of packets to capture (0 for unlimited): "))
 sniff(filter=filter, prn=packet_callback, count=0 if count == 0 else count)
  
