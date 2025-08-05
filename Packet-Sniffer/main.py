@@ -11,25 +11,29 @@ def packet_callback(packet):
 max_filters=19
 opt=0
 print("Select a filter:")
-print("1-TCP")
-print("2-UDP")
-print("3-ICMP")
-print("4-Certain Port")
-print("5-Certain IP")
-print("6-All IP packets")
-print("7-ARP packets")
-print("8-IPv6 Packets")
-print("9-HTTP")
-print("10-HTTPS")
-print("11-DNS")
-print("12-SSH")
-print("13-NTP")
-print("14-HTTP over TCP")
-print("15-DNS over TCP")
-print("16-DNS over UDP")
-print("17-HTTP or HTTPS")
-print("18-HTTP to/from specific IP")
-print("19-HTTPS to/from specific IP")
+print("1 - TCP")
+print("2 - UDP")
+print("3 - ICMP")
+print("4 - Certain Port")
+print("5 - Certain IP")
+print("6 - All IP packets")
+print("7 - ARP packets")
+print("8 - IPv6 Packets")
+print("9 - HTTP")
+print("10 - HTTPS")
+print("11 - DNS")
+print("12 - SSH")
+print("13 - NTP")
+print("14 - HTTP over TCP")
+print("15 - DNS over TCP")
+print("16 - DNS over UDP")
+print("17 - HTTP or HTTPS")
+print("18 - HTTP to/from specific IP")
+print("19 - HTTPS to/from specific IP")
+print("20 - TCP from specific IP")
+print("21 - UDP to specific IP")
+
+
 
 while opt<1 or opt>max_filters:
     opt=int(input("Enter option number:"))
@@ -77,8 +81,17 @@ elif opt==18:
 elif opt==19:
     IP=str(input("Enter IP:"))
     filter=f'host {IP} and port 443'                      
+elif opt == 20:
+    IP = input("Enter source IP: ")
+    filter = f"src host {IP} and tcp"
+elif opt == 21:
+    IP = input("Enter destination IP: ")
+    filter = f"dst host {IP} and udp"
+
 
 verbose = input("Show full packet details? (y/n): ").lower() == 'y'
 count = int(input("Enter number of packets to capture (0 for unlimited): "))
-sniff(filter=filter, prn=packet_callback, count=0 if count == 0 else count)
- 
+try:
+    sniff(filter=filter, prn=packet_callback, count=0 if count == 0 else count)
+except KeyboardInterrupt:
+    print("\nSniffing stopped by user.") 
