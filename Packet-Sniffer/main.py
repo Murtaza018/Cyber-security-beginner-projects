@@ -1,4 +1,5 @@
 from scapy.all import sniff
+from scapy.all import wrpcap
 from datetime import datetime
 
 def packet_callback(packet):
@@ -92,6 +93,8 @@ elif opt == 21:
 verbose = input("Show full packet details? (y/n): ").lower() == 'y'
 count = int(input("Enter number of packets to capture (0 for unlimited): "))
 try:
-    sniff(filter=filter, prn=packet_callback, count=0 if count == 0 else count)
+    packets=sniff(filter=filter, prn=packet_callback, count=0 if count == 0 else count)
+    wrpcap("captured_packets.pcap", packets)
+    print("\nPackets saved to captured_packets.pcap")
 except KeyboardInterrupt:
     print("\nSniffing stopped by user.") 
