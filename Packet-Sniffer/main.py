@@ -1,5 +1,6 @@
 from scapy.all import sniff
 from scapy.all import wrpcap
+from scapy.all import get_if_list
 from datetime import datetime
 
 def packet_callback(packet):
@@ -8,6 +9,13 @@ def packet_callback(packet):
     else:
         print(f"[{datetime.now().strftime('%H:%M:%S')}] {packet.summary()}")
 
+interfaces = get_if_list()
+print("\nAvailable interfaces:")
+for i, iface in enumerate(interfaces):
+    print(f"{i + 1} - {iface}")
+
+iface_index = int(input("Select interface number: ")) - 1
+iface_name = interfaces[iface_index]
 
 max_filters=19
 opt=0
@@ -93,7 +101,7 @@ elif opt == 21:
 verbose = input("Show full packet details? (y/n): ").lower() == 'y'
 count = int(input("Enter number of packets to capture (0 for unlimited): "))
 try:
-    packets=sniff(filter=filter, prn=packet_callback, count=0 if count == 0 else count)
+    packets=sniff(filter=filter, iface=iface_name,prn=packet_callback, count=0 if count == 0 else count)
     wrpcap("captured_packets.pcap", packets)
     print("\nPackets saved to captured_packets.pcap")
 except KeyboardInterrupt:
