@@ -47,7 +47,7 @@ print("21 - UDP to specific IP")
 while opt<1 or opt>max_filters:
     opt=int(input("Enter option number:"))
 
-filter=""
+filters=""
 if opt==1:
     filters="tcp"
 elif opt==2:
@@ -59,49 +59,49 @@ elif opt==4:
     filters=f'port {port}' 
 elif opt==5:
     IP=str(input("Enter IP:"))
-    filter=f'host {IP}'
+    filters=f'host {IP}'
 elif opt==6:
-    filter="ip"
+    filters="ip"
 elif opt==7:
-    filter="arp"               
+    filters="arp"               
 elif opt==8:
-    filter="ip6"
+    filters="ip6"
 elif opt==9:
-    filter="port 80"                   
+    filters="port 80"                   
 elif opt==10:
-    filter="port 443"   
+    filters="port 443"   
 elif opt==11:
-    filter="port 53"                    
+    filters="port 53"                    
 elif opt==12:
-    filter="tcp port 22"                    
+    filters="tcp port 22"                    
 elif opt==13:
-    filter="udp port 123"  
+    filters="udp port 123"  
 elif opt==14:
-    filter="tcp and port 80"                      
+    filters="tcp and port 80"                      
 elif opt==15:
-    filter="tcp and port 53"                      
+    filters="tcp and port 53"                      
 elif opt==16:
-    filter="udp and port 53"                      
+    filters="udp and port 53"                      
 elif opt==17:
-    filter="tcp and (port 80 or port 443)"
+    filters="tcp and (port 80 or port 443)"
 elif opt==18:
     IP=str(input("Enter IP:"))
-    filter=f'host {IP} and port 80'                      
+    filters=f'host {IP} and port 80'                      
 elif opt==19:
     IP=str(input("Enter IP:"))
-    filter=f'host {IP} and port 443'                      
+    filters=f'host {IP} and port 443'                      
 elif opt == 20:
     IP = input("Enter source IP: ")
-    filter = f"src host {IP} and tcp"
+    filters = f"src host {IP} and tcp"
 elif opt == 21:
     IP = input("Enter destination IP: ")
-    filter = f"dst host {IP} and udp"
+    filters = f"dst host {IP} and udp"
 
 
 verbose = input("Show full packet details? (y/n): ").lower() == 'y'
 count = int(input("Enter number of packets to capture (0 for unlimited): "))
 try:
-    packets=sniff(filter=filter, iface=iface_name,prn=packet_callback, count=0 if count == 0 else count)
+    packets=sniff(filter=filters, iface=iface_name,prn=packet_callback, count=0 if count == 0 else count)
     wrpcap("captured_packets.pcap", packets)
     print("\nPackets saved to captured_packets.pcap")
 except KeyboardInterrupt:
