@@ -3,11 +3,15 @@ from scapy.all import wrpcap
 from scapy.all import get_if_list
 from datetime import datetime
 
+global_count = 0
 def packet_callback(packet):
     if verbose:
         packet.show()
     else:
-        print(f"[{datetime.now().strftime('%H:%M:%S')}] {packet.summary()}")
+        global global_count
+        global_count += 1
+        print(f"#{global_count} [{datetime.now().strftime('%H:%M:%S')}] {packet.summary()}")
+        
 
 interfaces = get_if_list()
 print("\nAvailable interfaces:")
