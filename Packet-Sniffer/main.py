@@ -110,7 +110,9 @@ if again == 'y':
 
     try:
         packets=sniff(filter=filters, iface=iface_name,prn=packet_callback, count=0 if count == 0 else count)
-        wrpcap("captured_packets.pcap", packets)
+        filename=str(input("ENter filename:"))
+        filename+='.pcap'
+        wrpcap(filename, packets)
         print("\nPackets saved to captured_packets.pcap")
     except KeyboardInterrupt:
         print("\nSniffing stopped by user.") 
